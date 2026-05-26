@@ -1,0 +1,10 @@
+{
+  // Example personal overrides for settings.json
+  // Copy this file to settings.local.json and customize as needed
+  //
+  // Common overrides:
+  // - "permissions.add" / "permissions.remove" for additional allow/deny rules
+  // - "hooks" to disable or customize hook behavior
+  // - "model" to switch AI model
+  // - "maxTokens" to adjust response length
+}

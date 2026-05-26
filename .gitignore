@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+**/secrets/**
+**/credentials/**
+*.pem
+id_rsa
+id_ed25519
+
+# Personal Claude Code overrides
+.claude/settings.local.json
+
+# Active task state (per-developer, not shared history)
+tasks/in-progress/current.json
+
+# OS / editor
+.DS_Store
+*.swp
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test artifacts
+coverage/
+playwright-report/
+test-results/

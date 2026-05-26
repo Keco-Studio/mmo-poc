@@ -1,0 +1,38 @@
+{
+  "taskId": "task_0001_claude_harness_bootstrap",
+  "title": "Bootstrap Claude Code harness files",
+  "phase": "Phase 0A",
+  "intent": "spec",
+  "description": "Add the initial Claude Code native repository guidance files, harness guide, codebase map, and settings.",
+  "skills": [
+    "rpg-task-spec",
+    "patch-review"
+  ],
+  "allowedFiles": [
+    "CLAUDE.md",
+    ".claude/settings.json",
+    "docs/CODEBASE_MAP.md",
+    "docs/HARNESS.md"
+  ],
+  "forbiddenFiles": [
+    "src/**",
+    "server/**",
+    "assets/**"
+  ],
+  "contextFiles": [],
+  "acceptance": [
+    "Root CLAUDE.md explains project purpose, workflow, commands, and hard rules",
+    "docs/CODEBASE_MAP.md describes repository layout",
+    "docs/HARNESS.md describes the build/validate/playtest/patch loop",
+    ".claude/settings.json denies secrets and dangerous commands"
+  ],
+  "commands": [
+    "git diff --name-only"
+  ],
+  "maxAttempts": 1,
+  "outOfScope": [
+    "Do not implement game runtime",
+    "Do not add package dependencies",
+    "Do not create assets"
+  ]
+}
