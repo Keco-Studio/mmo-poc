@@ -122,3 +122,11 @@ Excalibur's runtime inspector relies on the scene maintaining its `engine` refer
 ### 5. Not checking the scene contract before editing
 
 The `runtime-state-contract.md` defines what state the scene must provide to other systems. Editing an actor without checking the contract can break assumptions made by other scenes or network synchronization code.
+
+## Inspector Integration
+
+`VillageScene` creates an `InspectorOverlay` instance in `onInitialize()` and updates it each frame in `onPostUpdate()`. When adding scene logic:
+
+- Keep async initialization separate from the `onInitialize()` body if it can fail — errors during `onInitialize()` prevent `ready` from becoming true
+- If adding new actor types, ensure their positions are tracked via `updateGameState()` in `onPostUpdate()`
+- The inspector updates every second (same cadence as `updateGameState()`)
