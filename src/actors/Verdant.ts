@@ -1,10 +1,15 @@
 import { Actor, Color, ImageSource, SpriteSheet, vec } from 'excalibur';
 import verdantManifest from '../../assets/characters/verdant.manifest.json';
 import { CharacterManifest } from '../assets/manifestTypes';
+import { NpcIntentClient } from '../systems/NpcIntentClient';
 
 export class Verdant extends Actor {
   private static _sheet: SpriteSheet | null = null;
   private static _initialized = false;
+  private static _intentClient = new NpcIntentClient();
+
+  lastStatement = '';
+  private _behaviorTimer = 0;
 
   static async bootstrapCharacter(): Promise<void> {
     if (Verdant._initialized) return;
@@ -45,5 +50,28 @@ export class Verdant extends Actor {
         this.graphics.use(frame);
       }
     }
+  }
+
+  override onPostUpdate(_engine: Parameters<Actor['onPostUpdate']>[0], elapsed: Parameters<Actor['onPostUpdate']>[1]): void {
+    this._behaviorTimer += elapsed;
+    if (this._behaviorTimer >= 10_000) {
+      this._behaviorTimer = 0;
+      this._updateIntent();
+    }
+  }
+
+  private async _updateIntent(): Promise<void> {
+    try {
+      const intent = await Verdant._intentClient.requestIntent(
+        'Verdant',
+        this.lastStatement || 'hello',
+        'village square'
+      );
+      void intent; // intent handled by future behavior system
+    } catch { /* fall back to idle */ }
+  }
+
+  recordStatement(statement: string): void {
+    this.lastStatement = statement;
   }
 }
