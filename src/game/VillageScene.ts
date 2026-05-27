@@ -5,7 +5,7 @@ import { updateGameState } from '../systems/RuntimeState';
 import { updateInteractionPrompt } from '../systems/InteractionSystem';
 import { InteractionPrompt } from '../ui/InteractionPrompt';
 import { DialogueBox } from '../ui/DialogueBox';
-import { addMapToScene } from '../world/MapRenderer';
+import { addMapToScene, bootstrapTileAssets } from '../world/MapRenderer';
 import npcs from '../data/npcs.json';
 import dialogue from '../data/dialogue.json';
 
@@ -18,8 +18,10 @@ export class VillageScene extends Scene {
   dialogueOpen = false;
   private _lastUpdateMs = 0;
 
-  override onInitialize(): void {
+  override async onInitialize(): Promise<void> {
     this.backgroundColor = Color.fromRGB(40, 80, 40);
+    await bootstrapTileAssets();
+    await Verdant.bootstrapCharacter();
     addMapToScene(this);
     this.player = new Player();
     this.add(this.player);

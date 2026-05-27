@@ -1,4 +1,4 @@
-type TileInfo = { name: string; blocked: boolean };
+type TileInfo = { tile: string; blocked: boolean };
 type TileMap = { tileSize: number; width: number; height: number; tiles: string[]; legend: Record<string, TileInfo> };
 
 export function isBlockedAt(map: TileMap, x: number, y: number): boolean {

@@ -20,8 +20,8 @@
     "wwwwwwwwwwwwwwwwwwww"
   ],
   "legend": {
-    "g": { "name": "grass", "blocked": false },
-    "p": { "name": "path", "blocked": false },
-    "w": { "name": "water", "blocked": true }
+    "g": { "tile": "grass", "blocked": false },
+    "p": { "tile": "path", "blocked": false },
+    "w": { "tile": "water", "blocked": true }
   }
 }
