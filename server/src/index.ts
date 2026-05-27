@@ -1,4 +1,7 @@
 import express, { Request, Response } from 'express';
+import * as fs from 'fs';
+import * as path from 'path';
+import { spawnSync } from 'child_process';
 
 const app = express();
 app.use(express.json());
@@ -47,6 +50,37 @@ app.post('/api/npc/intent', async (req: Request, res: Response) => {
     console.error('NPC intent error:', err);
     res.json({ npc, intent: 'idle', target: null, duration_ms: 10000 });
   }
+});
+
+app.get('/api/git/commits', (_req, res) => {
+  try {
+    const { execSync } = require('child_process');
+    const out = execSync('git log --oneline -20 --format="%h %s %ad" --date=short', { encoding: 'utf-8' });
+    const commits = out.trim().split('\n').map((line: string) => {
+      const m = line.match(/^([a-f0-9]+)\s+(.+?)\s+(\d{4}-\d{2}-\d{2})$/);
+      return m ? { hash: m[1], message: m[2], time: m[3] } : { hash: line.slice(0, 7), message: line.slice(8), time: '' };
+    });
+    res.json(commits);
+  } catch { res.json([]); }
+});
+
+app.get('/api/spec-summary', (_req, res) => {
+  try {
+    const content = fs.readFileSync(path.join(__dirname, '../../docs/GAME_SPEC.md'), 'utf-8');
+    res.send(content.split('\n').slice(0, 50).join('\n') + '\n...');
+  } catch { res.send('See docs/GAME_SPEC.md'); }
+});
+
+app.get('/api/asset-qa', (_req, res) => {
+  try {
+    spawnSync('npx', ['tsx', 'scripts/asset-qa.ts'], { encoding: 'utf-8', cwd: path.join(__dirname, '../..') });
+    const reportPath = path.join(__dirname, '../../reports/asset-qa-report.json');
+    if (fs.existsSync(reportPath)) {
+      res.json(JSON.parse(fs.readFileSync(reportPath, 'utf-8')));
+    } else {
+      res.json({ totalAssets: 0, summary: { errors: 0, warnings: 0 }, issues: [] });
+    }
+  } catch (e: unknown) { res.json({ error: String(e) }); }
 });
 
 const PORT = process.env.PORT ?? 3001;
