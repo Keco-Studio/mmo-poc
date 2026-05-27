@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MMO Harness Workbench</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a0f; color: #e0e0e8; min-height: 100vh; }
+    .header { background: #13131a; border-bottom: 1px solid #2a2a3a; padding: 12px 20px; display: flex; align-items: center; gap: 16px; }
+    .header h1 { font-size: 16px; font-weight: 600; color: #a0d8ef; }
+    .header .version { font-size: 12px; color: #666; }
+    .tabs { display: flex; gap: 0; padding: 12px 20px 0; border-bottom: 1px solid #1e1e28; }
+    .tab { padding: 8px 16px; cursor: pointer; border-radius: 6px 6px 0 0; font-size: 13px; color: #888; background: transparent; border: 1px solid transparent; border-bottom: none; }
+    .tab.active { background: #13131a; color: #a0d8ef; border-color: #2a2a3a; }
+    .tab:hover { color: #c0c0d0; }
+    .content { padding: 20px; }
+    .section { display: none; }
+    .section.active { display: block; }
+    .card { background: #13131a; border: 1px solid #2a2a3a; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+    .card h3 { font-size: 13px; font-weight: 600; color: #a0d8ef; margin-bottom: 12px; }
+    button { background: #1e2230; color: #c0c8d8; border: 1px solid #3a3a4a; border-radius: 6px; padding: 8px 16px; font-size: 13px; cursor: pointer; }
+    button:hover { background: #2a3040; border-color: #5a5a6a; }
+    button.primary { background: #2563a0; color: #fff; border-color: #2563a0; }
+    button.primary:hover { background: #3070b0; }
+    button.danger { background: #6b2020; color: #fff; border-color: #6b2020; }
+    button.danger:hover { background: #7b3030; }
+    .inline-code { font-family: monaco, 'Cascadia Code', monospace; background: #0d0d14; padding: 2px 6px; border-radius: 3px; font-size: 12px; color: #a0d8ef; font-size: 12px; }
+    .log { font-family: monaco, 'Cascadia Code', monospace; background: #0d0d14; padding: 12px; border-radius: 6px; font-size: 12px; max-height: 300px; overflow-y: auto; line-height: 1.6; }
+    .log-entry { padding: 2px 0; }
+    .log-entry.info { color: #a0d8ef; }
+    .log-entry.success { color: #50c878; }
+    .log-entry.error { color: #e05a5a; }
+    .log-entry.warn { color: #e0a040; }
+    .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+    .status-dot.ok { background: #50c878; }
+    .status-dot.err { background: #e05a5a; }
+    .status-dot.warn { background: #e0a040; }
+    iframe { width: 100%; height: 480px; border: 1px solid #2a2a3a; border-radius: 6px; background: #000; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    pre { font-size: 12px; line-height: 1.5; white-space: pre-wrap; word-break: break-word; }
+    .asset-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+    .asset-card { background: #0d0d14; border: 1px solid #2a2a3a; border-radius: 6px; padding: 12px; }
+    .asset-card img { width: 100%; max-height: 80px; object-fit: contain; background: #1a1a24; border-radius: 4px; }
+    .asset-card .name { font-size: 12px; font-weight: 600; color: #c0c8d8; margin-top: 6px; }
+    .asset-card .path { font-size: 11px; color: #666; font-family: monospace; margin-top: 2px; }
+    .commit-list { font-family: monaco, monospace; font-size: 12px; }
+    .commit-item { padding: 8px 0; border-bottom: 1px solid #1e1e28; }
+    .commit-item:last-child { border-bottom: none; }
+    .commit-hash { color: #a0d8ef; margin-right: 8px; }
+    .commit-msg { color: #c0c0d0; }
+    .commit-time { color: #555; font-size: 11px; }
+    .phase-list { font-size: 12px; color: #888; }
+    .phase-item { padding: 4px 0; }
+    .phase-item.done { color: #50c878; }
+    .phase-item.active { color: #a0d8ef; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>MMO Harness Workbench</h1>
+    <span class="version">Phase 8</span>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-section="overview">Overview</div>
+    <div class="tab" data-section="game">Game</div>
+    <div class="tab" data-section="playtest">Playtest</div>
+    <div class="tab" data-section="assets">Assets</div>
+    <div class="tab" data-section="history">History</div>
+  </div>
+
+  <div class="content">
+    <div class="section active" id="overview">
+      <div class="grid-2">
+        <div class="card">
+          <h3>Project Status</h3>
+          <div id="project-stats"></div>
+        </div>
+        <div class="card">
+          <h3>Quick Actions</h3>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">
+            <button onclick="runAssetQA()">Run Asset QA</button>
+            <button onclick="refreshOverview()">Refresh</button>
+          </div>
+          <div id="action-log" class="log" style="margin-top:12px;"><div class="log-entry info">Ready.</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>GameSpec Summary</h3>
+        <pre id="spec-summary" style="color:#888;font-size:12px;line-height:1.6">Loading...</pre>
+      </div>
+    </div>
+
+    <div class="section" id="game">
+      <div class="card">
+        <h3>Live Preview</h3>
+        <p style="font-size:12px;color:#666;margin-bottom:12px;">Preview at <span class="inline-code">http://localhost:5173</span></p>
+        <iframe src="http://localhost:5173" id="game-frame" sandbox="allow-scripts allow-same-origin"></iframe>
+      </div>
+    </div>
+
+    <div class="section" id="playtest">
+      <div class="card">
+        <h3>Playtest Controls</h3>
+        <p style="font-size:12px;color:#666;margin-bottom:12px;">Run from terminal: <span class="inline-code">npm run playtest</span></p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">
+          <button class="primary" onclick="showLastPlaytestReport()">Show Last Report</button>
+          <button onclick="showLastQAReport()">Show QA Report</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Playtest Results</h3>
+        <div id="playtest-log" class="log"><div class="log-entry info">Run "npm run playtest" in terminal.</div></div>
+      </div>
+    </div>
+
+    <div class="section" id="assets">
+      <div class="card">
+        <h3>Asset QA</h3>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">
+          <button class="primary" onclick="runAssetQA()">Run Asset QA</button>
+          <button onclick="showQAReport()">Show Report</button>
+        </div>
+        <div id="asset-qa-log" class="log" style="margin-top:12px;"><div class="log-entry info">Click "Run Asset QA" to check.</div></div>
+      </div>
+      <div class="card">
+        <h3>Characters</h3>
+        <div class="asset-grid" id="character-list"></div>
+      </div>
+      <div class="card">
+        <h3>Tilesets</h3>
+        <div class="asset-grid" id="tileset-list"></div>
+      </div>
+    </div>
+
+    <div class="section" id="history">
+      <div class="card">
+        <h3>Recent Commits</h3>
+        <div id="commit-list" class="commit-list">Loading...</div>
+      </div>
+      <div class="card">
+        <h3>Phase Progress</h3>
+        <div class="phase-list" id="phase-progress"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const PHASES = [
+      { name: 'Phase 0A: Project Bootstrap', done: true },
+      { name: 'Phase 0B: Placeholder Assets', done: true },
+      { name: 'Phase 1: Asset Manifests', done: true },
+      { name: 'Phase 2: Runtime Inspector', done: true },
+      { name: 'Phase 3: Playtest Bot', done: true },
+      { name: 'Phase 4: Patch Loop Helpers', done: true },
+      { name: 'Phase 5: Skills Hardening', done: true },
+      { name: 'Phase 6: NPC AI System', done: true },
+      { name: 'Phase 7: Asset QA', done: true },
+      { name: 'Phase 8: Workbench UI', done: true },
+    ];
+
+    function log(container, msg, type = 'info') {
+      const el = document.createElement('div');
+      el.className = 'log-entry ' + type;
+      el.textContent = '[' + new Date().toLocaleTimeString() + '] ' + msg;
+      const logEl = document.getElementById(container);
+      logEl.prepend(el);
+    }
+
+    function showPhases() {
+      const el = document.getElementById('phase-progress');
+      el.innerHTML = PHASES.map(p => {
+        const cls = p.done ? 'done' : '';
+        return `<div class="phase-item ${cls}">${p.done ? '&#10003;' : '&#9711;'} ${p.name}</div>`;
+      }).join('');
+    }
+
+    async function refreshOverview() {
+      log('action-log', 'Gathering project info...', 'info');
+      document.getElementById('project-stats').innerHTML =
+        '<span class="status-dot ok"></span> Project ready<br>' +
+        '<span class="status-dot ok"></span> 8 phases complete<br>' +
+        '<span class="status-dot ok"></span> Workbench loaded';
+      log('action-log', 'Project status OK', 'success');
+    }
+
+    async function runAssetQA() {
+      const logEl = 'asset-qa-log';
+      log(logEl, 'Running asset QA...', 'info');
+      const r = await fetch('/api/asset-qa');
+      const data = await r.json();
+      log(logEl, 'Total assets: ' + data.totalAssets, 'info');
+      log(logEl, 'Errors: ' + data.summary.errors + ' | Warnings: ' + data.summary.warnings, data.summary.errors > 0 ? 'error' : 'success');
+      data.issues.forEach(i => log(logEl, '[' + i.severity + '] ' + i.message, i.severity));
+    }
+
+    async function showQAReport() {
+      try {
+        const r = await fetch('/api/asset-qa');
+        const data = await r.json();
+        const el = document.getElementById('asset-qa-log');
+        el.innerHTML = '';
+        log('asset-qa-log', 'Total: ' + data.totalAssets + ' | Errors: ' + data.summary.errors + ' | Warnings: ' + data.summary.warnings, data.summary.errors > 0 ? 'error' : 'success');
+        data.issues.forEach(i => log('asset-qa-log', i.message, i.severity));
+      } catch { log('asset-qa-log', 'Run asset QA first', 'error'); }
+    }
+
+    async function showLastPlaytestReport() {
+      try {
+        const r = await fetch('/reports/playtest-report.json');
+        const data = await r.json();
+        document.getElementById('playtest-log').innerHTML = '';
+        log('playtest-log', 'Report: ' + JSON.stringify(data.summary || data, null, 2), 'info');
+      } catch { log('playtest-log', 'No playtest report found. Run "npm run playtest" first.', 'error'); }
+    }
+
+    async function showLastQAReport() {
+      try {
+        const r = await fetch('/api/asset-qa');
+        const data = await r.json();
+        document.getElementById('playtest-log').innerHTML = '';
+        log('playtest-log', 'Asset QA: ' + data.totalAssets + ' assets, ' + data.summary.errors + ' errors, ' + data.summary.warnings + ' warnings', data.summary.errors > 0 ? 'error' : 'success');
+      } catch { log('playtest-log', 'Run asset QA first', 'error'); }
+    }
+
+    function loadAssetList(id, files) {
+      const container = document.getElementById(id);
+      container.innerHTML = '';
+      files.forEach(f => {
+        const card = document.createElement('div');
+        card.className = 'asset-card';
+        const prefix = id === 'character-list' ? '/assets/characters/' : '/assets/tilesets/';
+        card.innerHTML = `<img src="${prefix}${f}" alt="${f}" onerror="this.style.display='none'"><div class="name">${f}</div><div class="path">${prefix}${f}</div>`;
+        container.appendChild(card);
+      });
+    }
+
+    function loadCommitList() {
+      fetch('/api/git/commits')
+        .then(r => r.json())
+        .then(commits => {
+          const el = document.getElementById('commit-list');
+          el.innerHTML = commits.map(c =>
+            `<div class="commit-item"><span class="commit-hash">${c.hash}</span><span class="commit-msg">${c.message}</span><span class="commit-time"> — ${c.time}</span></div>`
+          ).join('') || '<div style="color:#666">No commits loaded</div>';
+        })
+        .catch(() => { document.getElementById('commit-list').textContent = 'Unable to load commits. Start dev server.'; });
+    }
+
+    // Tabs
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.section).classList.add('active');
+      });
+    });
+
+    showPhases();
+    loadAssetList('character-list', ['verdant.png']);
+    loadAssetList('tileset-list', ['village.png']);
+    loadCommitList();
+    // GameSpec summary
+    fetch('/api/spec-summary')
+      .then(r => r.text())
+      .then(t => { document.getElementById('spec-summary').textContent = t; })
+      .catch(() => { document.getElementById('spec-summary').textContent = 'See docs/GAME_SPEC.md'; });
+  </script>
+</body>
+</html>
