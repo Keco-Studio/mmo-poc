@@ -1,0 +1,40 @@
+{
+  "taskId": "0013",
+  "title": "Manifest Loader Helpers",
+  "phase": "Phase 1",
+  "intent": "Add TypeScript manifest types and loader helpers for creating Excalibur sprites and animations from manifests.",
+  "skills": [],
+  "allowedFiles": [
+    "src/assets/manifestTypes.ts",
+    "src/assets/AssetManifestLoader.ts",
+    "package.json"
+  ],
+  "forbiddenFiles": [
+    ".env",
+    ".env.*"
+  ],
+  "contextFiles": [
+    "docs/agent-guides/asset-manifest-contract.md",
+    "src/actors/Verdant.ts",
+    "src/world/MapRenderer.ts"
+  ],
+  "acceptance": [
+    "manifestTypes.ts exports CharacterManifest and TilesetManifest TypeScript types.",
+    "AssetManifestLoader.ts exports loadCharacterManifest, createAnimation, loadTilesetManifest, createTileSprite functions.",
+    "Loader works with Excalibur ImageSource, SpriteSheet, and Sprite.",
+    "npm run build passes."
+  ],
+  "commands": [
+    {
+      "description": "TypeScript compilation check.",
+      "command": "npm run build",
+      "expectedOutput": "dist/main.js"
+    }
+  ],
+  "maxAttempts": 3,
+  "outOfScope": [
+    "Updating actor/scene code to use the loader.",
+    "Adding async image loading.",
+    "Adding asset validation."
+  ]
+}

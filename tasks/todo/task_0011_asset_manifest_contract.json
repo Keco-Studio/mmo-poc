@@ -1,0 +1,42 @@
+{
+  "taskId": "0011",
+  "title": "Asset Manifest Contract",
+  "phase": "Phase 1",
+  "intent": "Document the character and tileset manifest contract and define scoped Phase 1 TaskSpecs.",
+  "skills": ["rpg-task-spec"],
+  "allowedFiles": [
+    "docs/agent-guides/asset-manifest-contract.md",
+    "tasks/todo/task_0011_asset_manifest_contract.json",
+    "tasks/todo/task_0012_placeholder_assets.json",
+    "tasks/todo/task_0013_manifest_loader.json",
+    "tasks/todo/task_0014_render_assets_from_manifests.json",
+    "tasks/todo/task_0015_manifest_validation.json"
+  ],
+  "forbiddenFiles": [
+    ".env",
+    ".env.*",
+    "src/**",
+    "assets/**"
+  ],
+  "contextFiles": [
+    "docs/superpowers/specs/2026-05-27-phase-1-asset-manifest-design.md"
+  ],
+  "acceptance": [
+    "Asset manifest contract document exists and describes character and tileset manifest shapes.",
+    "Contract defines validation expectations for manifests and map tile keys.",
+    "TaskSpecs 0011 through 0015 exist under tasks/todo and are valid JSON."
+  ],
+  "commands": [
+    {
+      "description": "Validate TaskSpec JSON files parse successfully.",
+      "command": "node -e \"for (const f of require('fs').readdirSync('tasks/todo')) JSON.parse(require('fs').readFileSync('tasks/todo/'+f,'utf8')); console.log('valid')\"",
+      "expectedOutput": "valid"
+    }
+  ],
+  "maxAttempts": 3,
+  "outOfScope": [
+    "Generating PNG assets.",
+    "Changing runtime rendering.",
+    "Adding manifest validation code."
+  ]
+}

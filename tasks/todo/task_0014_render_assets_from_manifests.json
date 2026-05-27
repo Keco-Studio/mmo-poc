@@ -1,0 +1,52 @@
+{
+  "taskId": "0014",
+  "title": "Render Verdant and Map Tiles from Manifests",
+  "phase": "Phase 1",
+  "intent": "Update Verdant actor and map renderer to consume character and tileset manifests instead of hardcoded colored rectangles.",
+  "skills": [],
+  "allowedFiles": [
+    "src/actors/Verdant.ts",
+    "src/world/MapRenderer.ts",
+    "src/world/collision.ts",
+    "src/data/map.json",
+    "tests/playtest/game.spec.ts",
+    "tests/playtest/npc-dialogue.spec.ts"
+  ],
+  "forbiddenFiles": [
+    ".env",
+    ".env.*",
+    "scripts/**",
+    "tasks/**"
+  ],
+  "contextFiles": [
+    "docs/agent-guides/asset-manifest-contract.md",
+    "src/assets/manifestTypes.ts",
+    "src/assets/AssetManifestLoader.ts"
+  ],
+  "acceptance": [
+    "Verdant.ts renders from verdant.manifest.json animation 'idle-down', no hardcoded frame indexes.",
+    "MapRenderer.ts renders map tiles from village.manifest.json using semantic tile keys.",
+    "collision.ts reads 'blocked' from tileset manifest entries via TileInfo.tile field.",
+    "map.json uses tile names (grass, path, water) in legend, not hardcoded colors.",
+    "npm run build passes.",
+    "npm run playtest passes (game opens, no console errors; dialogue flow works)."
+  ],
+  "commands": [
+    {
+      "description": "Build and typecheck.",
+      "command": "npm run build",
+      "expectedOutput": "dist/main.js"
+    },
+    {
+      "description": "Playwright playtest verifies game opens and NPC dialogue works.",
+      "command": "npm run playtest",
+      "expectedOutput": "2 passed"
+    }
+  ],
+  "maxAttempts": 3,
+  "outOfScope": [
+    "Adding NPC AI behavior.",
+    "Adding asset hot-reload.",
+    "Adding new tiles or characters beyond Verdant and village."
+  ]
+}

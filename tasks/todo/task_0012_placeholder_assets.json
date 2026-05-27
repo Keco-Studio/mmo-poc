@@ -1,0 +1,47 @@
+{
+  "taskId": "0012",
+  "title": "Placeholder Asset Generation",
+  "phase": "Phase 1",
+  "intent": "Generate tiny placeholder PNGs and manifest JSON files for Verdant and village tileset.",
+  "skills": [],
+  "allowedFiles": [
+    "assets/characters/verdant.png",
+    "assets/characters/verdant.manifest.json",
+    "assets/tilesets/village.png",
+    "assets/tilesets/village.manifest.json",
+    "scripts/generate-placeholder-assets.ts",
+    "package.json"
+  ],
+  "forbiddenFiles": [
+    ".env",
+    ".env.*",
+    "src/**"
+  ],
+  "contextFiles": [
+    "docs/agent-guides/asset-manifest-contract.md"
+  ],
+  "acceptance": [
+    "assets/characters/verdant.png and assets/tilesets/village.png are valid PNG files with correct dimensions.",
+    "assets/characters/verdant.manifest.json and assets/tilesets/village.manifest.json are valid JSON matching the contract.",
+    "scripts/generate-placeholder-assets.ts exists and can regenerate the placeholders.",
+    "Verdant image is 32×32 pixels (1 frame). Village tileset is 160×40 pixels (4 tiles at 40×40)."
+  ],
+  "commands": [
+    {
+      "description": "Check placeholder assets exist.",
+      "command": "node -e \"const fs=require('fs'); console.log('verdant:', fs.statSync('assets/characters/verdant.png').size+'bytes, village:', fs.statSync('assets/tilesets/village.png').size+'bytes')\"",
+      "expectedOutput": "bytes"
+    },
+    {
+      "description": "Validate placeholder manifest JSON.",
+      "command": "node -e \"const v=JSON.parse(require('fs').readFileSync('assets/characters/verdant.manifest.json','utf8')); const t=JSON.parse(require('fs').readFileSync('assets/tilesets/village.manifest.json','utf8')); console.log('verdant:',v.id,v.type,'tileset:',t.id,t.type)\"",
+      "expectedOutput": "verdant: verdant character tileset: village tileset"
+    }
+  ],
+  "maxAttempts": 3,
+  "outOfScope": [
+    "Production-quality pixel art.",
+    "Runtime code changes.",
+    "Asset loading integration."
+  ]
+}

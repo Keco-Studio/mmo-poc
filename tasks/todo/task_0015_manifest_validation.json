@@ -1,0 +1,51 @@
+{
+  "taskId": "0015",
+  "title": "Manifest Validation",
+  "phase": "Phase 1",
+  "intent": "Add manifest validation script and npm run validate command that checks manifest structure, file existence, and map tile key consistency.",
+  "skills": [],
+  "allowedFiles": [
+    "scripts/validate.ts",
+    "package.json",
+    "docs/HARNESS.md"
+  ],
+  "forbiddenFiles": [
+    ".env",
+    ".env.*",
+    "src/**",
+    "assets/**"
+  ],
+  "contextFiles": [
+    "docs/agent-guides/asset-manifest-contract.md",
+    "docs/superpowers/plans/2026-05-27-phase-1-asset-manifest-plan.md"
+  ],
+  "acceptance": [
+    "npm run validate executes scripts/validate.ts.",
+    "Validation checks: manifest JSON parseable, required fields exist, image paths non-empty, dimensions positive, named entries non-empty.",
+    "Invalid manifest or map tile keys produce clear error messages.",
+    "npm run build, npm run validate, and npm run playtest all pass."
+  ],
+  "commands": [
+    {
+      "description": "Build the project.",
+      "command": "npm run build",
+      "expectedOutput": "dist/main.js"
+    },
+    {
+      "description": "Run manifest validation.",
+      "command": "npm run validate",
+      "expectedOutput": "All manifests valid"
+    },
+    {
+      "description": "Playwright tests pass.",
+      "command": "npm run playtest",
+      "expectedOutput": "2 passed"
+    }
+  ],
+  "maxAttempts": 3,
+  "outOfScope": [
+    "Image pixel inspection.",
+    "AI-generated asset QA.",
+    "Asset browsing UI."
+  ]
+}
