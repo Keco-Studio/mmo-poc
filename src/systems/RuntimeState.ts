@@ -9,6 +9,7 @@ export type GameState = {
   npcs: RuntimeNpc[];
   promptVisible: boolean;
   dialogueOpen: boolean;
+  errors: string[];
 };
 
 declare global {
@@ -27,28 +28,33 @@ export function initializeGameState(): void {
     npcs: [],
     promptVisible: false,
     dialogueOpen: false,
+    errors: [],
   };
 }
 
 export function updateGameState(input: {
   scene: string;
   ready: boolean;
-  player?: Actor;
-  npcs?: Actor[];
+  player?: Actor | { x: number; y: number };
+  npcs?: Actor[] | RuntimeNpc[];
   promptVisible?: boolean;
   dialogueOpen?: boolean;
+  errors?: string[];
 }): void {
   window.__GAME_STATE__ = {
     scene: input.scene,
     ready: input.ready,
-    player: input.player ? { x: Math.round(input.player.pos.x), y: Math.round(input.player.pos.y) } : emptyPlayer,
-    npcs: (input.npcs ?? []).map((npc) => ({
-      id: npc.name,
-      name: npc.name,
-      x: Math.round(npc.pos.x),
-      y: Math.round(npc.pos.y),
-    })),
+    player: input.player
+      ? 'x' in input.player
+        ? { x: Math.round(input.player.x), y: Math.round(input.player.y) }
+        : { x: Math.round((input.player as Actor).pos.x), y: Math.round((input.player as Actor).pos.y) }
+      : emptyPlayer,
+    npcs: (input.npcs ?? []).map(npc => {
+      if ('x' in npc) return npc as RuntimeNpc;
+      return { id: npc.name, name: npc.name, x: Math.round(npc.pos.x), y: Math.round(npc.pos.y) };
+    }),
     promptVisible: input.promptVisible ?? false,
     dialogueOpen: input.dialogueOpen ?? false,
+    errors: input.errors ?? [],
   };
 }
