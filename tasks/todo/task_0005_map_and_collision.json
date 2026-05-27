@@ -1,0 +1,40 @@
+{
+  "taskId": "task_0005_map_and_collision",
+  "title": "Render small map and block collision tiles",
+  "phase": "Phase 0B",
+  "intent": "implement",
+  "description": "Add a small data-driven tile map with grass, path, water, and wall tiles, and prevent the player from moving into blocked tiles.",
+  "skills": [
+    "excalibur-scene",
+    "patch-review"
+  ],
+  "allowedFiles": [
+    "src/data/map.json",
+    "src/world/MapRenderer.ts",
+    "src/world/collision.ts",
+    "src/game/VillageScene.ts",
+    "src/actors/Player.ts"
+  ],
+  "forbiddenFiles": [
+    "server/**",
+    "tests/**"
+  ],
+  "contextFiles": [
+    "docs/HARNESS.md",
+    "docs/CODEBASE_MAP.md"
+  ],
+  "acceptance": [
+    "Grass, path, water, and wall tiles render from src/data/map.json",
+    "Player cannot move through blocked water/wall tiles",
+    "npm run build passes"
+  ],
+  "commands": [
+    "npm run build"
+  ],
+  "maxAttempts": 2,
+  "outOfScope": [
+    "Do not add NPCs",
+    "Do not add dialogue",
+    "Do not add asset files or sprite sheets"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "taskId": "task_0009_playwright_open_game",
+  "title": "First Playwright browser test — game opens",
+  "phase": "Phase 3",
+  "intent": "test",
+  "description": "Set up Playwright, open the game in a browser, verify canvas and runtime state exist, assert no console errors.",
+  "skills": ["patch-review"],
+  "allowedFiles": [
+    "package.json",
+    "playwright.config.ts",
+    "tests/playtest/game.spec.ts"
+  ],
+  "forbiddenFiles": ["server/**", "src/**"],
+  "contextFiles": ["docs/HARNESS.md", "docs/CODEBASE_MAP.md"],
+  "acceptance": [
+    "Playwright can open the game at localhost:5173",
+    "Canvas element exists in the page",
+    "window.__GAME_STATE__ exists",
+    "No console errors during load",
+    "npm run build passes"
+  ],
+  "commands": ["npm run build", "npx playwright test"],
+  "maxAttempts": 2,
+  "outOfScope": ["Do not test player movement", "Do not test NPC dialogue", "Do not add screenshots yet"]
+}

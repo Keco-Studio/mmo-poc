@@ -1,0 +1,39 @@
+{
+  "taskId": "task_0003_player_movement",
+  "title": "Add controllable player with WASD/arrow movement",
+  "phase": "Phase 0B",
+  "intent": "implement",
+  "description": "Introduce a Player actor that responds to WASD and arrow keys and is clamped to scene bounds.",
+  "skills": [
+    "excalibur-scene",
+    "patch-review"
+  ],
+  "allowedFiles": [
+    "src/actors/Player.ts",
+    "src/game/VillageScene.ts"
+  ],
+  "forbiddenFiles": [
+    "server/**",
+    "tests/**",
+    "src/data/**"
+  ],
+  "contextFiles": [
+    "docs/HARNESS.md",
+    "docs/CODEBASE_MAP.md",
+    "docs/agent-guides/runtime-state-contract.md"
+  ],
+  "acceptance": [
+    "WASD and arrow keys move the player in cardinal directions",
+    "Player position is clamped inside the 800x600 scene bounds",
+    "npm run build passes"
+  ],
+  "commands": [
+    "npm run build"
+  ],
+  "maxAttempts": 2,
+  "outOfScope": [
+    "Do not add animations or sprite sheets",
+    "Do not add collision against tiles (Task 0005)",
+    "Do not add NPCs (Task 0006)"
+  ]
+}

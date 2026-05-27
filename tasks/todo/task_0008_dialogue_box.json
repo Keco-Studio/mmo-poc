@@ -1,0 +1,25 @@
+{
+  "taskId": "task_0008_dialogue_box",
+  "title": "Open dialogue box with E near Verdant",
+  "phase": "Phase 0B",
+  "intent": "implement",
+  "description": "Pressing E while in range of Verdant opens a simple dialogue box and updates runtime state.",
+  "skills": ["excalibur-scene", "patch-review"],
+  "allowedFiles": [
+    "src/ui/DialogueBox.ts",
+    "src/systems/InteractionSystem.ts",
+    "src/data/dialogue.json",
+    "src/game/VillageScene.ts"
+  ],
+  "forbiddenFiles": ["server/**", "tests/**"],
+  "contextFiles": ["docs/HARNESS.md", "docs/agent-guides/runtime-state-contract.md"],
+  "acceptance": [
+    "Pressing E near Verdant opens a dialogue box",
+    "Dialogue content loads from src/data/dialogue.json",
+    "window.__GAME_STATE__.dialogueOpen is true while dialogue is open",
+    "npm run build passes"
+  ],
+  "commands": ["npm run build"],
+  "maxAttempts": 2,
+  "outOfScope": ["Do not add AI integration", "Do not add branching dialogue", "Do not add Playwright tests"]
+}

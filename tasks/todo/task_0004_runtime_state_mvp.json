@@ -1,0 +1,39 @@
+{
+  "taskId": "task_0004_runtime_state_mvp",
+  "title": "Expose window.__GAME_STATE__ with scene + player position",
+  "phase": "Phase 2",
+  "intent": "implement",
+  "description": "Introduce a runtime inspector system that writes a JSON-serializable snapshot to window.__GAME_STATE__ each frame, including the active scene name and player x/y.",
+  "skills": [
+    "excalibur-scene",
+    "patch-review"
+  ],
+  "allowedFiles": [
+    "src/systems/RuntimeState.ts",
+    "src/main.ts",
+    "src/game/Game.ts",
+    "src/game/VillageScene.ts"
+  ],
+  "forbiddenFiles": [
+    "server/**",
+    "tests/**",
+    "src/actors/**"
+  ],
+  "contextFiles": [
+    "docs/HARNESS.md",
+    "docs/agent-guides/runtime-state-contract.md"
+  ],
+  "acceptance": [
+    "window.__GAME_STATE__ exposes { scene: string, player: {x:number,y:number}, ready: boolean }",
+    "Snapshot updates at least once per second while the game runs",
+    "npm run build passes"
+  ],
+  "commands": [
+    "npm run build"
+  ],
+  "maxAttempts": 2,
+  "outOfScope": [
+    "Do not include NPCs, dialogue, or map state yet",
+    "Do not add Playwright tests (Task 0009)"
+  ]
+}

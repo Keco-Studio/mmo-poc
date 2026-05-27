@@ -1,0 +1,38 @@
+{
+  "taskId": "task_0006_verdant_npc",
+  "title": "Add Verdant NPC actor",
+  "phase": "Phase 0B",
+  "intent": "implement",
+  "description": "Add a static Verdant NPC actor to the village scene at the map spawn point and register them in the runtime state.",
+  "skills": [
+    "excalibur-scene",
+    "patch-review"
+  ],
+  "allowedFiles": [
+    "src/actors/Verdant.ts",
+    "src/data/npcs.json",
+    "src/game/VillageScene.ts"
+  ],
+  "forbiddenFiles": [
+    "server/**",
+    "tests/**",
+    "src/actors/Player.ts"
+  ],
+  "contextFiles": [
+    "docs/HARNESS.md",
+    "docs/CODEBASE_MAP.md"
+  ],
+  "acceptance": [
+    "Verdant appears in the village square per npcs.json spawn point",
+    "window.__GAME_STATE__.npcs includes Verdant with name, x, y",
+    "npm run build passes"
+  ],
+  "commands": [
+    "npm run build"
+  ],
+  "maxAttempts": 2,
+  "outOfScope": [
+    "Do not add dialogue or AI integration (Phase 6)",
+    "Do not add movement or behavior beyond static placement"
+  ]
+}

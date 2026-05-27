@@ -1,0 +1,24 @@
+{
+  "taskId": "task_0007_interaction_prompt",
+  "title": "Show interaction prompt near Verdant",
+  "phase": "Phase 0B",
+  "intent": "implement",
+  "description": "Display a prompt when the player is within 48px of Verdant and expose prompt visibility through runtime state.",
+  "skills": ["excalibur-scene", "patch-review"],
+  "allowedFiles": [
+    "src/ui/InteractionPrompt.ts",
+    "src/systems/InteractionSystem.ts",
+    "src/game/VillageScene.ts"
+  ],
+  "forbiddenFiles": ["server/**", "tests/**", "src/actors/Player.ts"],
+  "contextFiles": ["docs/HARNESS.md", "docs/agent-guides/runtime-state-contract.md"],
+  "acceptance": [
+    "Prompt appears when player is within 48px of Verdant",
+    "Prompt disappears when player leaves range",
+    "window.__GAME_STATE__.promptVisible reflects prompt visibility",
+    "npm run build passes"
+  ],
+  "commands": ["npm run build"],
+  "maxAttempts": 2,
+  "outOfScope": ["Do not open dialogue", "Do not add AI integration", "Do not add Playwright tests"]
+}

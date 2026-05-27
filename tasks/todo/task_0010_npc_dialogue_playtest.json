@@ -1,0 +1,27 @@
+{
+  "taskId": "task_0010_npc_dialogue_playtest",
+  "title": "NPC dialogue Playwright playtest",
+  "phase": "Phase 3",
+  "intent": "test",
+  "description": "Add a browser playtest that moves the player near Verdant, verifies the prompt, presses E, verifies dialogue opens, and saves screenshot and JSON report artifacts.",
+  "skills": ["patch-review"],
+  "allowedFiles": [
+    "package.json",
+    "tests/playtest/npc-dialogue.spec.ts",
+    "tests/playtest/report.ts"
+  ],
+  "forbiddenFiles": ["server/**", "src/**", "assets/**"],
+  "contextFiles": ["docs/HARNESS.md", "docs/agent-guides/runtime-state-contract.md"],
+  "acceptance": [
+    "Playtest moves the player near Verdant",
+    "Prompt becomes visible",
+    "Pressing E opens dialogue",
+    "Screenshot is saved under reports/",
+    "JSON report is saved under reports/",
+    "npm run build passes",
+    "npx playwright test passes"
+  ],
+  "commands": ["npm run build", "npx playwright test"],
+  "maxAttempts": 2,
+  "outOfScope": ["Do not add AI integration", "Do not change game runtime code", "Do not add extra NPCs"]
+}
