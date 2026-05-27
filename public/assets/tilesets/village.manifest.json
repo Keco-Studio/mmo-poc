@@ -1,0 +1,25 @@
+{
+  "id": "village",
+  "type": "tileset",
+  "image": "./village.png",
+  "tileWidth": 40,
+  "tileHeight": 40,
+  "tiles": {
+    "grass": {
+      "frame": 0,
+      "blocked": false
+    },
+    "path": {
+      "frame": 1,
+      "blocked": false
+    },
+    "water": {
+      "frame": 2,
+      "blocked": true
+    },
+    "wall": {
+      "frame": 3,
+      "blocked": true
+    }
+  }
+}

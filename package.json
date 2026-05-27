@@ -9,7 +9,8 @@
     "typecheck": "tsc --noEmit",
     "playtest": "playwright test",
     "preview": "vite preview",
-    "generate:assets": "tsx scripts/generate-placeholder-assets.ts"
+    "generate:assets": "tsx scripts/generate-placeholder-assets.ts",
+    "validate": "tsx scripts/validate.ts"
   },
   "dependencies": {
     "excalibur": "^0.30.3"
