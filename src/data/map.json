@@ -1,0 +1,27 @@
+{
+  "tileSize": 40,
+  "width": 20,
+  "height": 15,
+  "tiles": [
+    "wwwwwwwwwwwwwwwwwwww",
+    "wggggggggggggggggggw",
+    "wggggggggggggggggggw",
+    "wgggpppppppppppggggw",
+    "wgggpgggggggggpggggw",
+    "wgggpgggggggggpggggw",
+    "wgggpppppppppppggggw",
+    "wggggggggggggggggggw",
+    "wggggggggggggggggggw",
+    "wggggggggggggggggggw",
+    "wggggggggggggggggggw",
+    "wggggggggggggggggggw",
+    "wggggggggggggggggggw",
+    "wggggggggggggggggggw",
+    "wwwwwwwwwwwwwwwwwwww"
+  ],
+  "legend": {
+    "g": { "name": "grass", "blocked": false },
+    "p": { "name": "path", "blocked": false },
+    "w": { "name": "water", "blocked": true }
+  }
+}

@@ -1,7 +1,10 @@
 import { Actor, Color, Engine, Keys, vec } from 'excalibur';
+import mapData from '../data/map.json';
+import { isBlockedAt, TileMap } from '../world/collision';
 
 const SPEED = 180;
 const HALF_SIZE = 12;
+const MAP = mapData as TileMap;
 
 export class Player extends Actor {
   constructor() {
@@ -20,10 +23,12 @@ export class Player extends Actor {
     const dy = Number(kb.isHeld(Keys.KeyS) || kb.isHeld(Keys.ArrowDown)) - Number(kb.isHeld(Keys.KeyW) || kb.isHeld(Keys.ArrowUp));
     const length = Math.hypot(dx, dy) || 1;
     const step = SPEED * (elapsedMs / 1000);
+    const nextX = this.pos.x + (dx / length) * step;
+    const nextY = this.pos.y + (dy / length) * step;
+    const clampedX = Math.min(engine.drawWidth - HALF_SIZE, Math.max(HALF_SIZE, nextX));
+    const clampedY = Math.min(engine.drawHeight - HALF_SIZE, Math.max(HALF_SIZE, nextY));
 
-    this.pos.x += (dx / length) * step;
-    this.pos.y += (dy / length) * step;
-    this.pos.x = Math.min(engine.drawWidth - HALF_SIZE, Math.max(HALF_SIZE, this.pos.x));
-    this.pos.y = Math.min(engine.drawHeight - HALF_SIZE, Math.max(HALF_SIZE, this.pos.y));
+    if (!isBlockedAt(MAP, clampedX, this.pos.y)) this.pos.x = clampedX;
+    if (!isBlockedAt(MAP, this.pos.x, clampedY)) this.pos.y = clampedY;
   }
 }

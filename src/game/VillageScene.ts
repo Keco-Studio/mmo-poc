@@ -1,6 +1,7 @@
 import { Color, Engine, Scene } from 'excalibur';
 import { Player } from '../actors/Player';
 import { updateGameState } from '../systems/RuntimeState';
+import { addMapToScene } from '../world/MapRenderer';
 
 export class VillageScene extends Scene {
   player!: Player;
@@ -8,6 +9,7 @@ export class VillageScene extends Scene {
 
   override onInitialize(): void {
     this.backgroundColor = Color.fromRGB(40, 80, 40);
+    addMapToScene(this);
     this.player = new Player();
     this.add(this.player);
   }
