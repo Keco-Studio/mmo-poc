@@ -1,0 +1,45 @@
+{
+  "taskId": "task_0002_vite_excalibur_bootstrap",
+  "title": "Bootstrap Vite and Excalibur canvas",
+  "phase": "Phase 0B",
+  "intent": "implement",
+  "description": "Create a minimal Vite + TypeScript + Excalibur.js project that renders a browser game canvas.",
+  "skills": [
+    "excalibur-scene",
+    "patch-review"
+  ],
+  "allowedFiles": [
+    "package.json",
+    "vite.config.ts",
+    "tsconfig.json",
+    "index.html",
+    "src/main.ts",
+    "src/game/Game.ts",
+    "src/game/VillageScene.ts"
+  ],
+  "forbiddenFiles": [
+    "server/**",
+    "assets/**",
+    "tests/**"
+  ],
+  "contextFiles": [
+    "docs/HARNESS.md",
+    "docs/CODEBASE_MAP.md"
+  ],
+  "acceptance": [
+    "npm install succeeds",
+    "npm run dev starts Vite",
+    "Browser shows an Excalibur canvas",
+    "npm run build passes",
+    "No NPC, map, AI, backend, or Playwright implementation yet"
+  ],
+  "commands": [
+    "npm run build"
+  ],
+  "maxAttempts": 2,
+  "outOfScope": [
+    "Do not add NPCs",
+    "Do not add AI integration",
+    "Do not add Playwright yet"
+  ]
+}
