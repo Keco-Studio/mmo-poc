@@ -10,7 +10,8 @@
     "playtest": "playwright test",
     "preview": "vite preview",
     "generate:assets": "tsx scripts/generate-placeholder-assets.ts",
-    "validate": "tsx scripts/validate.ts"
+    "validate": "tsx scripts/validate.ts",
+    "report": "tsx scripts/write-playtest-report.ts"
   },
   "dependencies": {
     "excalibur": "^0.30.3"
